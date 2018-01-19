@@ -26,6 +26,7 @@ public class history extends AppCompatActivity {
     private List<historyData> mHistoryList;
     private TextView mTextMessage;
 
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -33,17 +34,14 @@ public class history extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_history:
-                    mTextMessage.setText(R.string.title_history);
                     Intent intent = new Intent(history.this, history.class);
                     startActivity(intent);
                     break;
                 case R.id.navigation_information:
-                    mTextMessage.setText(R.string.title_information);
                     Intent intent1 = new Intent(history.this, MainActivity.class);
                     startActivity(intent1);
                     break;
                 case R.id.navigation_setting:
-                    mTextMessage.setText(R.string.title_setting);
                     Intent intent2 = new Intent(history.this, setting.class);
                     startActivity(intent2);
                     return true;
@@ -51,7 +49,6 @@ public class history extends AppCompatActivity {
             return false;
         }
     };
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
@@ -59,6 +56,9 @@ public class history extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
+        mTextMessage = (TextView) findViewById(R.id.message);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
 
         lvHistory = (ListView) findViewById(R.id.ls_history);

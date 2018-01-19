@@ -25,17 +25,14 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_history:
-                    mTextMessage.setText(R.string.title_history);
                     Intent intent = new Intent(MainActivity.this, history.class);
                     startActivity(intent);
                     break;
                 case R.id.navigation_information:
-                    mTextMessage.setText(R.string.title_information);
                     Intent intent1 = new Intent(MainActivity.this, MainActivity.class);
                     startActivity(intent1);
                     break;
                 case R.id.navigation_setting:
-                    mTextMessage.setText(R.string.title_setting);
                     Intent intent2 = new Intent(MainActivity.this, setting.class);
                     startActivity(intent2);
                     return true;
