@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent1);
                     break;
                 case R.id.navigation_setting:
-                    Intent intent2 = new Intent(MainActivity.this, setting.class);
+                    Intent intent2 = new Intent(MainActivity.this, CameraActivity.class);
                     startActivity(intent2);
                     return true;
             }

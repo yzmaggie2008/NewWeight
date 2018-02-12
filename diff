@@ -1,0 +1,280 @@
+diff --git a/.gitignore b/.gitignore
+index 39fb081..a37c628 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -7,3 +7,4 @@
+ /build
+ /captures
+ .externalNativeBuild
++/.project
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+index 5389d0c..0576070 100644
+--- a/app/src/main/AndroidManifest.xml
++++ b/app/src/main/AndroidManifest.xml
+@@ -2,6 +2,11 @@
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+     package="com.example.yumimama.weightloss">
+ 
++    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="8"/>
++    <uses-permission android:name="android.permission.CAMERA" />
++    <uses-feature android:name="android.hardware.camera" />
++    <uses-feature android:name="android.hardware.camera.autofocus" />
++
+     <application
+         android:allowBackup="true"
+         android:icon="@mipmap/ic_launcher"
+@@ -10,8 +15,8 @@
+         android:supportsRtl="true"
+         android:theme="@style/AppTheme">
+         <activity android:name=".history"></activity>
+-        <activity android:name=".setting"></activity>
+         <activity android:name=".HistoryActivity"></activity>
++        <activity android:name=".CameraActivity"></activity>
+ 
+         <activity
+             android:name=".MainActivity"
+diff --git a/app/src/main/java/com/example/yumimama/weightloss/MainActivity.java b/app/src/main/java/com/example/yumimama/weightloss/MainActivity.java
+index 83b033e..bf52ca4 100644
+--- a/app/src/main/java/com/example/yumimama/weightloss/MainActivity.java
++++ b/app/src/main/java/com/example/yumimama/weightloss/MainActivity.java
+@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
+                     startActivity(intent1);
+                     break;
+                 case R.id.navigation_setting:
+-                    Intent intent2 = new Intent(MainActivity.this, setting.class);
++                    Intent intent2 = new Intent(MainActivity.this, CameraActivity.class);
+                     startActivity(intent2);
+                     return true;
+             }
+diff --git a/app/src/main/java/com/example/yumimama/weightloss/history.java b/app/src/main/java/com/example/yumimama/weightloss/history.java
+index 3e4ec9e..11801ef 100644
+--- a/app/src/main/java/com/example/yumimama/weightloss/history.java
++++ b/app/src/main/java/com/example/yumimama/weightloss/history.java
+@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
+ import android.os.Bundle;
+ import android.support.annotation.NonNull;
+ import android.support.annotation.Nullable;
++import android.support.constraint.ConstraintLayout;
+ import android.support.design.widget.BottomNavigationView;
+ import android.support.v7.app.AlertDialog;
+ import android.support.v7.app.AppCompatActivity;
+@@ -15,6 +16,7 @@ import android.widget.Button;
+ import android.widget.EditText;
+ import android.widget.LinearLayout;
+ import android.widget.ListView;
++import android.widget.RelativeLayout;
+ import android.widget.TextView;
+ import android.widget.Toast;
+ 
+@@ -33,7 +35,6 @@ public class history extends AppCompatActivity implements View.OnClickListener {
+     private List<historyData> historyList;
+     private SQLiteDatabase db;
+ 
+-
+     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+             = new BottomNavigationView.OnNavigationItemSelectedListener() {
+ 
+@@ -49,7 +50,7 @@ public class history extends AppCompatActivity implements View.OnClickListener {
+                     startActivity(intent1);
+                     break;
+                 case R.id.navigation_setting:
+-                    Intent intent2 = new Intent(history.this, setting.class);
++                    Intent intent2 = new Intent(history.this, CameraActivity.class);
+                     startActivity(intent2);
+                     return true;
+             }
+@@ -89,7 +90,7 @@ public class history extends AppCompatActivity implements View.OnClickListener {
+                 intent.putExtra("request","Look");
+                 intent.putExtra("id",historyList.get(i).getId());
+                 intent.putExtra("date",historyList.get(i).getDate());
+-                intent.putExtra("grade",historyList.get(i).getWeight());
++                intent.putExtra("weight",historyList.get(i).getWeight());
+ 
+                 startActivityForResult(intent, 0);
+             }
+@@ -109,7 +110,7 @@ public class history extends AppCompatActivity implements View.OnClickListener {
+                 AlertDialog.Builder builder=new AlertDialog.Builder(this);
+ 
+ 
+-                final LinearLayout searchView= (LinearLayout) getLayoutInflater().inflate(R.layout.dialog_search,null);
++                final ConstraintLayout searchView= (ConstraintLayout) getLayoutInflater().inflate(R.layout.dialog_search,null);
+                 builder.setView(searchView);
+                 final AlertDialog dialog=builder.create();
+                 dialog.show();
+@@ -169,8 +170,10 @@ public class history extends AppCompatActivity implements View.OnClickListener {
+                     Toast.makeText(this,"Add Successful",Toast.LENGTH_SHORT).show();
+                 break;
+         }
++        historyList = dbHandler.getAllHistory();
++        adapter = new HistoryAdapter(this,historyList);
++        historys.setAdapter(adapter);
+ 
+-        onCreate(null);
+     }
+     }
+ 
+diff --git a/app/src/main/java/com/example/yumimama/weightloss/setting.java b/app/src/main/java/com/example/yumimama/weightloss/setting.java
+deleted file mode 100644
+index 61d5228..0000000
+--- a/app/src/main/java/com/example/yumimama/weightloss/setting.java
++++ /dev/null
+@@ -1,10 +0,0 @@
+-package com.example.yumimama.weightloss;
+-
+-import android.support.v7.app.AppCompatActivity;
+-
+-/**
+- * Created by yumimama on 1/17/18.
+- */
+-
+-public class setting extends AppCompatActivity {
+-}
+diff --git a/app/src/main/res/layout/activity_history.xml b/app/src/main/res/layout/activity_history.xml
+index bd50894..d95eff1 100644
+--- a/app/src/main/res/layout/activity_history.xml
++++ b/app/src/main/res/layout/activity_history.xml
+@@ -19,53 +19,57 @@
+         app:layout_constraintRight_toRightOf="parent"
+         app:menu="@menu/navigation" />
+     <RelativeLayout
+-        android:layout_width="match_parent"
++        android:layout_width="wrap_content"
+         android:layout_height="450dp">
+ 
+-    <ListView
+-        android:id="@+id/history_list"
+-        android:layout_alignParentTop="true"
+-        android:divider="#5ABC4F"
+-        android:dividerHeight="1dp"
+-        android:layout_width="match_parent"
+-        android:layout_height="400dp"
+-        ></ListView>
+-
+-     <LinearLayout
+-         android:layout_alignParentBottom="true"
+-         android:orientation="horizontal"
+-         android:layout_marginTop="3dp"
+-         android:layout_marginLeft="5dp"
+-         android:layout_marginRight="5dp"
+-         android:layout_width="match_parent"
+-         android:layout_height="wrap_content">
+-
+-         <Button
+-             android:id="@+id/btn_add"
+-             android:text="Add"
+-             android:textSize="25sp"
+-             android:textColor="#ffffff"
+-             android:gravity="center"
+-             android:layout_marginRight="5dp"
+-             android:background="#5ABC4F"
+-             android:layout_width="0dp"
+-             android:layout_weight="1"
+-             android:layout_height="45dp"
+-             />
+-
+-         <Button
+-             android:id="@+id/btn_search"
+-             android:text="Search"
+-             android:textSize="25sp"
+-             android:textColor="#ffffff"
+-             android:gravity="center"
+-             android:layout_marginLeft="5dp"
+-             android:background="#5ABC4F"
+-             android:layout_width="0dp"
+-             android:layout_weight="1"
+-             android:layout_height="45dp" />
+-
+-     </LinearLayout>
++        <ListView
++            android:id="@+id/history_list"
++            android:layout_width="match_parent"
++            android:layout_height="400dp"
++            android:layout_alignParentLeft="true"
++            android:layout_alignParentStart="true"
++            android:layout_alignParentTop="true"
++            android:divider="#5ABC4F"
++            android:dividerHeight="1dp"></ListView>
++
++        <Button
++            android:id="@+id/btn_add"
++            android:layout_width="180dp"
++            android:layout_height="45dp"
++            android:layout_marginRight="5dp"
++            android:layout_marginTop="400dp"
++            android:layout_weight="1"
++            android:background="#5ABC4F"
++            android:gravity="center"
++            android:text="Add"
++            android:textColor="#ffffff"
++            android:textSize="25sp" />
++
++        <Button
++            android:id="@+id/btn_search"
++            android:text="Search"
++            android:textSize="25sp"
++            android:textColor="#ffffff"
++            android:gravity="center"
++            android:layout_marginLeft="5dp"
++            android:background="#5ABC4F"
++            android:layout_width="180dp"
++            android:layout_weight="1"
++            android:layout_height="45dp"
++            android:layout_marginTop="400dp"
++            android:layout_toRightOf="@id/btn_add"/>
+ 
+     </RelativeLayout>
++
++
++
++
++
++
++
++
++
++
++
++
+ </android.support.constraint.ConstraintLayout>
+\ No newline at end of file
+diff --git a/app/src/main/res/layout/activity_setting.xml b/app/src/main/res/layout/activity_setting.xml
+index 454f97a..002078d 100644
+--- a/app/src/main/res/layout/activity_setting.xml
++++ b/app/src/main/res/layout/activity_setting.xml
+@@ -19,4 +19,35 @@
+         app:layout_constraintRight_toRightOf="parent"
+         app:menu="@menu/navigation" />
+ 
++    <RelativeLayout
++        android:layout_width="match_parent"
++        android:layout_height="450dp">
++
++        <SurfaceView
++            android:id="@+id/surfaceView1"
++            android:layout_width="250dp"
++            android:layout_height="150dp"
++            android:layout_alignLeft="@+id/imageView1"
++            android:layout_alignParentTop="true"
++            android:layout_alignStart="@+id/imageView1" />
++
++        <Button
++            android:id="@+id/button1"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_below="@+id/surfaceView1"
++            android:layout_centerHorizontal="true"
++            android:text="Take photo">
++
++        </Button>
++
++        <ImageView
++            android:id="@+id/imageView1"
++            android:layout_width="250dp"
++            android:layout_height="250dp"
++            android:layout_alignParentBottom="true"
++            android:layout_centerHorizontal="true" />
++
++    </RelativeLayout>
++
+ </android.support.constraint.ConstraintLayout>
+\ No newline at end of file

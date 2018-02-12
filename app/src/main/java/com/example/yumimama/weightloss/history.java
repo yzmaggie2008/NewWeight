@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,7 +35,6 @@ public class history extends AppCompatActivity implements View.OnClickListener {
     private List<historyData> historyList;
     private SQLiteDatabase db;
 
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -49,7 +50,7 @@ public class history extends AppCompatActivity implements View.OnClickListener {
                     startActivity(intent1);
                     break;
                 case R.id.navigation_setting:
-                    Intent intent2 = new Intent(history.this, setting.class);
+                    Intent intent2 = new Intent(history.this, CameraActivity.class);
                     startActivity(intent2);
                     return true;
             }
@@ -89,7 +90,7 @@ public class history extends AppCompatActivity implements View.OnClickListener {
                 intent.putExtra("request","Look");
                 intent.putExtra("id",historyList.get(i).getId());
                 intent.putExtra("date",historyList.get(i).getDate());
-                intent.putExtra("grade",historyList.get(i).getWeight());
+                intent.putExtra("weight",historyList.get(i).getWeight());
 
                 startActivityForResult(intent, 0);
             }
@@ -109,7 +110,7 @@ public class history extends AppCompatActivity implements View.OnClickListener {
                 AlertDialog.Builder builder=new AlertDialog.Builder(this);
 
 
-                final LinearLayout searchView= (LinearLayout) getLayoutInflater().inflate(R.layout.dialog_search,null);
+                final ConstraintLayout searchView= (ConstraintLayout) getLayoutInflater().inflate(R.layout.dialog_search,null);
                 builder.setView(searchView);
                 final AlertDialog dialog=builder.create();
                 dialog.show();
@@ -169,8 +170,10 @@ public class history extends AppCompatActivity implements View.OnClickListener {
                     Toast.makeText(this,"Add Successful",Toast.LENGTH_SHORT).show();
                 break;
         }
+        historyList = dbHandler.getAllHistory();
+        adapter = new HistoryAdapter(this,historyList);
+        historys.setAdapter(adapter);
 
-        onCreate(null);
     }
     }
 
