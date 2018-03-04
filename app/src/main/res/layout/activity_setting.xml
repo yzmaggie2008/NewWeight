@@ -23,31 +23,29 @@
         android:layout_width="match_parent"
         android:layout_height="450dp">
 
-        <SurfaceView
-            android:id="@+id/surfaceView1"
-            android:layout_width="250dp"
-            android:layout_height="150dp"
-            android:layout_alignLeft="@+id/imageView1"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/imageView1" />
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="casual"
+            android:gravity="center"
+            android:text="You can using the camera function to save or view the picture you saved. Click the button below to start your process!" />
 
         <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/surfaceView1"
-            android:layout_centerHorizontal="true"
-            android:text="Take photo">
 
-        </Button>
+            android:id="@+id/btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text"
+            android:fontFamily="casual"
+            android:text="Select Photo" />
 
         <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
-
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_below="@id/btn"
+            android:id="@+id/iv"/>
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

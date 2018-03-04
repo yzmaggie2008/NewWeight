@@ -22,13 +22,14 @@
     <RelativeLayout
         android:layout_width="383dp"
         android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="1dp"
-        tools:ignore="MissingConstraints">
+        tools:layout_editor_absoluteY="0dp">
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="385dp"
-            android:layout_height="200dp"
+            android:layout_height="150dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
@@ -41,6 +42,7 @@
             android:layout_below="@+id/imageView"
             android:layout_centerInParent="true"
             android:layout_marginBottom="29dp"
+            android:fontFamily="casual"
             android:text="Welcome to Weight Loss App!" />
 
         <TextView
@@ -51,6 +53,7 @@
             android:layout_alignStart="@+id/tx_height"
             android:layout_below="@+id/imageView"
             android:layout_marginTop="32dp"
+            android:fontFamily="casual"
             android:gravity="center"
             android:text="Weight: " />
 
@@ -60,6 +63,7 @@
             android:layout_height="42dp"
             android:layout_below="@id/tx_weight"
             android:layout_marginLeft="4pt"
+            android:fontFamily="casual"
             android:gravity="center"
             android:text="Height: " />
 
@@ -67,10 +71,13 @@
             android:id="@+id/tx_gender"
             android:layout_width="61dp"
             android:layout_height="42dp"
+            android:layout_alignLeft="@+id/tx_height"
+            android:layout_alignStart="@+id/tx_height"
             android:layout_below="@+id/tx_height"
-            android:layout_marginLeft="4pt"
+            android:fontFamily="casual"
             android:gravity="center"
             android:text="Gender: " />
+
 
         <EditText
             android:id="@+id/weight"
@@ -82,30 +89,33 @@
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp" />
 
-        <EditText
-            android:id="@+id/gender"
-            android:layout_width="115dp"
-            android:layout_height="42dp"
-            android:layout_alignBaseline="@+id/tx_gender"
-            android:layout_alignBottom="@+id/tx_gender"
-            android:layout_alignLeft="@+id/weight"
-            android:layout_alignStart="@+id/weight" />
+        <RadioGroup
+            android:id="@+id/rd_group"
+            android:layout_width="160dp"
+            android:layout_height="30dp"
+            android:layout_alignLeft="@+id/height"
+            android:layout_alignStart="@+id/height"
+            android:layout_alignTop="@+id/female"
+            android:orientation="horizontal">
+
+        </RadioGroup>
 
         <EditText
             android:id="@+id/height"
             android:layout_width="115dp"
             android:layout_height="42dp"
-            android:layout_above="@+id/gender"
-            android:layout_alignLeft="@+id/gender"
-            android:layout_alignStart="@+id/gender" />
+            android:layout_above="@+id/cancel"
+            android:layout_alignLeft="@+id/weight"
+            android:layout_alignStart="@+id/weight" />
 
         <Button
             android:id="@+id/cancel"
             android:layout_width="80dp"
             android:layout_height="37dp"
+            android:layout_alignBottom="@+id/female"
             android:layout_alignLeft="@+id/submit"
             android:layout_alignStart="@+id/submit"
-            android:layout_below="@+id/height"
+            android:fontFamily="casual"
             android:text="Cancel"
             app:layout_editor_absoluteX="274dp"
             tools:ignore="MissingConstraints"
@@ -116,10 +126,9 @@
             android:layout_width="80dp"
             android:layout_height="37dp"
             android:layout_alignBottom="@+id/weight"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
+            android:layout_toEndOf="@+id/mainMessage"
+            android:layout_toRightOf="@+id/mainMessage"
+            android:fontFamily="casual"
             android:text="Submit"
             app:layout_constraintBottom_toTopOf="@+id/cancel"
             app:layout_editor_absoluteX="274dp"
@@ -127,11 +136,35 @@
             tools:layout_editor_absoluteX="274dp" />
 
         <TextView
-            android:layout_width="80pt"
-            android:layout_height="40pt"
-            android:layout_centerInParent="true"
-            android:layout_below="@id/tx_gender"
-            android:id="@+id/tx_submit"/>
+            android:id="@+id/tx_submit"
+            android:layout_width="100pt"
+            android:layout_height="60pt"
+            android:layout_below="@+id/tx_gender"
+            android:layout_centerHorizontal="true" />
+
+        <RadioButton
+            android:id="@+id/female"
+            android:layout_width="80dp"
+            android:layout_height="27dp"
+            android:layout_alignBaseline="@+id/tx_gender"
+            android:layout_alignBottom="@+id/tx_gender"
+            android:layout_alignEnd="@+id/rd_group"
+            android:layout_alignRight="@+id/rd_group"
+            android:checked="false"
+            android:fontFamily="casual"
+            android:text="Female" />
+
+        <RadioButton
+            android:id="@+id/male"
+            android:layout_width="80dp"
+            android:layout_height="27dp"
+            android:layout_alignBaseline="@+id/tx_gender"
+            android:layout_alignBottom="@+id/tx_gender"
+            android:layout_alignLeft="@+id/rd_group"
+            android:layout_alignStart="@+id/rd_group"
+            android:checked="false"
+            android:fontFamily="casual"
+            android:text="Male" />
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

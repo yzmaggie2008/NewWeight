@@ -9,6 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -16,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTextMessage,tx_Submit;
     private EditText mWeight,mHeight,mGender;
     private Button btn_Submit,btn_Cancel;
+    private RadioButton selectedRadioButton;
+    private RadioGroup radioGroup;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -52,13 +56,17 @@ public class MainActivity extends AppCompatActivity {
 
         final EditText mWeight = (EditText) findViewById(R.id.weight);
         final EditText mHeight = (EditText) findViewById(R.id.height);
-        final EditText mGender = (EditText) findViewById(R.id.gender);
+
         final TextView tx_Submit = findViewById(R.id.tx_submit);
+        radioGroup = (RadioGroup)findViewById(R.id.rd_group);
         btn_Submit = (Button)findViewById(R.id.submit);
         btn_Submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               tx_Submit.setText("The information you entered: \n" + "Weight: " + mWeight.getText().toString() +"\n" + "Height: "  + mHeight.getText().toString() + "\n" + "Gender: " +mGender.getText().toString());
+
+               selectedRadioButton = (RadioButton)findViewById(radioGroup.getCheckedRadioButtonId());
+               String yourSelect = selectedRadioButton.getText().toString();
+               tx_Submit.setText("The information you entered: \n" + "Weight: " + mWeight.getText().toString() +"\n" + "Height: "  + mHeight.getText().toString() + "\n" + "Gender: " +yourSelect);
             }
         });
         btn_Cancel= (Button) findViewById(R.id.cancel);

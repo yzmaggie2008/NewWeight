@@ -64,6 +64,8 @@ public class history extends AppCompatActivity implements View.OnClickListener {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         historys= (ListView) findViewById(R.id.history_list);
         btnAdd= (Button) findViewById(R.id.btn_add);
